@@ -1,6 +1,7 @@
-# Project 0
+# Reetzonline.com Website Development
 
-Web Programming with Python and JavaScript
+http://reetzonline.com/
+
+Main pages include index, CV, portfolio and contact. 
 
 
-https://www.raspberrypi.org/documentation/remote-access/web-server/nginx.md
