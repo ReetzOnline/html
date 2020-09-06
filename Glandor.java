@@ -13,7 +13,7 @@ DEVELOPMENT IDEAS
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game8 {
+public class Glandor {
 
   static int row = 0;
   static boolean quit = false;
