@@ -3,11 +3,15 @@ Text-based game written in Java.
 Enjoy!
 
 DEVELOPMENT IDEAS
+- more interaction between player and words
+- ask for name, age entrancemore description about rooms when 'look'
+- include a couple hidden codes within the rooms
 - give player a maximum of 50 moves to reach the end of the game
 - make padlock a clue which can be attached to different objects
 - inlude input request for age, terminate game for those under the age of 18
 - make player information provate and seperate
 - develop responses to match player's attributes, e.g. gender
+- word wrapping to improve output  
 */
 
 import java.util.ArrayList;
