@@ -13,7 +13,7 @@ DEVELOPMENT IDEAS
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Glandor {
+public class Main {
 
   static int row = 0;
   static boolean quit = false;
@@ -116,9 +116,9 @@ public class Glandor {
             case "search oven": case "open oven": System.out.println(nonSpecial); break;
             case "look fridge": System.out.printf(distanceView, fridge.getType() + " (it's padlocked)"); break;
             case "shoot padlock": case "shoot lock": shootPad = true; System.out.println("The padlock falls away and the fridge opens.\n"); break;
-            case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.println("You notice a secret passage leading down into the earth. You lean against the wall of the passage way etrance. It's coolness has a calming effect, as distant sounds hum and vibrate through the surface. You can see a soft glow in the distance inviting you in.\n\b"
-              + "Trasures await but there is no need to rush. Take a rest and check your inventory. "); inventory();
-                if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clues. Head back, collect more clues, and then search here again. %n", (Clue.countObjects - bag.size()));}
+            case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.println("You notice a secret passage leading down into the earth. You lean against the wall of the passage way entrance. It's coolness has a calming effect, as distant sounds hum and vibrate through the surface. You can see a soft glow in the distance inviting you in.\n\b"
+              + "Treasures await but there's no need to rush. Take a rest and check your inventory. "); inventory();
+                if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). Head back, collect more clues, and then search here again. %n", (Clue.countObjects - bag.size()));}
                 else {System.out.println("You have all the clues you need to enter Glandor Castle. Instructions will follow in Part 2 of this game.");}; break;}
               else {System.out.println("You can't open the fridge to search it.");}; break;
             case "look part 2": System.out.println("Baby there ain't no part 2. Go do some workplace activities."); break;
