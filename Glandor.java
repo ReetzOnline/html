@@ -3,21 +3,23 @@ Text-based game written in Java.
 Enjoy!
 
 DEVELOPMENT IDEAS
+- deal with exception which occurs when requesting another hint after reaching the end of gameHints array
+- deal with exception when playerAge input is not an integer
 - more interaction between player and words
-- ask for name, age entrancemore description about rooms when 'look'
+- more description about rooms when 'look'
 - include a couple hidden codes within the rooms
 - give player a maximum of 50 moves to reach the end of the game
 - make padlock a clue which can be attached to different objects
 - inlude input request for age, terminate game for those under the age of 18
-- make player information provate and seperate
-- develop responses to match player's attributes, e.g. gender
-- word wrapping to improve output  
+- make player information private and seperate
+- develop responses to match player's attributes, e.g. playing style
+- word wrapping to improve output
 */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class Glandor {
 
   static int row = 0;
   static boolean quit = false;
@@ -33,10 +35,28 @@ public class Main {
   static boolean shootPad = false;
   static boolean partTwo = false;
   static ArrayList<String> bag;
+  static final String quitA = "quit";
+  static final String quitB = "q";
 
   public static void main(String[] args) {
 
-    Player rb = new Player("Rita", 64, "female");
+    Scanner start = new Scanner(System.in);
+
+    System.out.println(" ");
+    System.out.println("Welcome wanderer. You've entered the quest to reach Glandor Castle. Type 'quit' or 'q' to end the game at any time.\n\nWhat do you call yourself?");
+    String playerName = start.nextLine();
+    if (start.equals(quitA)){quit();return;}
+    if (start.equals(quitB)){quit();return;}
+
+    System.out.println(" ");
+    System.out.println("How old are you? Enter your age in numbers, e.g. 22.");
+    int playerAge = start.nextInt();
+    if (playerAge < 18){
+      System.out.print("Sorry. You need to be 18 or over to play this game."); return;}
+      if (start.equals(quitA)){quit();return;}
+      if (start.equals(quitB)){quit();return;}
+
+    Player wanderer = new Player(playerName, playerAge);
 
     Location lounge = new Location("North", "lounge", "a sofa and table");
     Location bathroom = new Location("South", "bathroom", "a cabinet unit");
@@ -59,20 +79,21 @@ public class Main {
 
     bag = new ArrayList<String>();
 
-    System.out.printf("%n\bHi %s. %n%nYou are currently floating above a magical cottage. On your back is an empty bag which acts as your inventory. Find the clues to take you to your destiny. %n%n\b"
-      + "Type 'help' (no quotation marks) at any time. Type 'quit' or 'q' to end the game.%n%n", rb.getName());
-    System.out.println(" ");
+    System.out.printf("%n***********%n");
+    System.out.printf("%nHi %s. %n%nYou are currently floating above a magical cottage. On your back is an empty bag which acts as your inventory.%nFind the clues to take you to your destiny. %n%n"
+      + "Type 'help' (no quotation marks) at any time for assistance.%nType 'quit' or 'q' to end the game.%n%n", wanderer.getName());
+    System.out.printf("***********%n");
 
     Scanner input = new Scanner(System.in);
 
     bridge://label to be used in furture development of game
     while (quit!=true){
-        System.out.println("\n\bWhat would you like to do now?"+"\n");
+        System.out.println("\nWhat would you like to do now?"+"\n");
         String command = input.nextLine();
 
         switch(command){
 
-            case "quit": case "q": System.out.println("Thank you for playing, good bye."); quit=true; break;
+            case quitA: case quitB: quit(); quit=true; break;
             case "help": help(); break;
             case "hint": hint(); break;
             case "inv": inventory(); break;
@@ -120,7 +141,7 @@ public class Main {
             case "search oven": case "open oven": System.out.println(nonSpecial); break;
             case "look fridge": System.out.printf(distanceView, fridge.getType() + " (it's padlocked)"); break;
             case "shoot padlock": case "shoot lock": shootPad = true; System.out.println("The padlock falls away and the fridge opens.\n"); break;
-            case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.println("You notice a secret passage leading down into the earth. You lean against the wall of the passage way entrance. It's coolness has a calming effect, as distant sounds hum and vibrate through the surface. You can see a soft glow in the distance inviting you in.\n\b"
+            case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.println("You notice a secret passage leading down into the earth. You lean against the wall of the passage way entrance. It's coolness has a calming effect, as distant sounds hum and vibrate through the surface. You can see a soft glow in the distance inviting you in.\n"
               + "Treasures await but there's no need to rush. Take a rest and check your inventory. "); inventory();
                 if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). Head back, collect more clues, and then search here again. %n", (Clue.countObjects - bag.size()));}
                 else {System.out.println("You have all the clues you need to enter Glandor Castle. Instructions will follow in Part 2 of this game.");}; break;}
@@ -137,47 +158,51 @@ public class Main {
   }//end of main function
 
 
+public static void quit(){
+  System.out.println("Thank you for playing, good bye.");
+}//end of quit method
+
+
 public static void help(){
-      System.out.printf("Commands here are case sensitive. Use any of the following commands to help you on your journey:%n%n\b"
-              + "look - shows you what's in the location, e.g. look garage%n\b"
-              + "north, south, east or west - to teleport around the bulding%n\b"
-              + "search - find clues, e.g. search car%n\b"
-              + "take - to place items in your bag, e.g. take shoe%n\b"
-              + "drop - to remove an item from your bag, e.g. drop shoe%n\b"
-              + "inv - to see what's in your inventory%n\b"
-              + "hint - to get an assist, if you're stuck, but only if you really need it%n\b"
-              + "part 2 - use this command when you get to the end and you're ready to collect your next set of instrucitons%n\b"
-              + "quit - to end the game%n\b");
-  }//end of help method
+  String direction = "to teleport to the north of the bulding (same applies for other directions)";
+  String look = "to look at rooms, objects, etc. from a distance, e.g. look garage";
+  String search = "to find clues, e.g. search car";
+  String take = "to place item in your bag, e.g. take shoe";
+  String drop = "to remove item from your bag, e.g. drop shoe";
+  String inv = "to see what's in your inventory";
+  String hint = "to get an assist, if you're stuck, but only if you really need it";
+  String part2 = "to find out what happens next";
+  String quit = "to end the game";
+
+  System.out.printf("Commands here are case sensitive. Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
+    }//end of help method
 
 
-  public static void inventory() {
-    System.out.printf("You have %d items in your bag: ", bag.size());
-    for (String i: bag){
-      System.out.print(i+" ");}
+public static void inventory() {
+  System.out.printf("You have %d items in your bag: ", bag.size());
+  for (String i: bag){
+    System.out.print(i+" ");}
     System.out.println("\n");
   }//end of inventory method
 
 
-  public static void hint() {
-    String [][] gameHints = { {"1st hint \b", "Spelling is important."}, {"2nd hint \b", "Somtimes it helps to step back and take a look a things."}, {"3rd hint \b", "Stick to those commands at your disposal."}, {"4th hint \b", "Search through items when you feel the need."}, {"5th hint\b", "You can't carry furnature in your bag."}, {"6th hint\b", "Really? You need another hint?"} };
-    for (int column=0; column < gameHints[row].length; column++){
-      System.out.println(gameHints[row][column]);
-    }
+public static void hint() {
+  String [][] gameHints = { {"1st hint ", "spelling is important."}, {"2nd hint ", "sometimes it helps to step back and take a look a things."}, {"3rd hint ", "stick to those commands at your disposal."}, {"4th hint ", "search through items when you feel the need."}, {"5th hint", "silly, you can't carry furnature in your bag."}, {"6th hint", "serious? you need another hint?"} };
+  for (int column=0; column < gameHints[row].length; column++){
+    System.out.println(gameHints[row][column]);
+  }
     row++;
-  }//end of hint method
+}//end of hint method
 
 
   //PLAYER
   public static class Player {
     String name;
     int age;
-    String gender;
 
-    Player(String name, int age, String gender) {
+    Player(String name, int age) {
         this.setName(name);
-        this.setAge(age);
-        this.setGender(gender);}
+        this.setAge(age);}
 
     public void setName(String name) {
         this.name = name;}
@@ -185,17 +210,11 @@ public static void help(){
     public void setAge(int age) {
         this.age = age;}
 
-    public void setGender(String gender) {
-            this.gender = gender;}
-
-    public String getName() {
+      public String getName() {
         return this.name;}
 
     public int getAge() {
         return this.age;}
-
-    public String getGender() {
-        return this.gender;}
   }//end of player class
 
 
