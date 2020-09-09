@@ -46,10 +46,10 @@ public class Game1 {
 
     String playerName = start.nextLine();
 
-    if (start.equals(quitA)){
+    if (playerName.equals(quitA)){
       quit();return;
     }
-    if (start.equals(quitB)){
+    if (playerName.equals(quitB)){
       quit();return;
     }
 
