@@ -3,15 +3,14 @@ Text-based game written in Java.
 Enjoy!
 
 DEVELOPMENT IDEAS
-- deal with exception which occurs when requesting another hint after reaching the end of gameHints array
-- deal with exception when playerAge input is not an integer
+
 - more interaction between player and words
 - more description about rooms when 'look'
 - include a couple hidden codes within the rooms
 - give player a maximum of 50 moves to reach the end of the game
 - make padlock a clue which can be attached to different objects
-- inlude input request for age, terminate game for those under the age of 18
-- make player information private and seperate
+- include input request for age, terminate game for those under the age of 18
+- make player information private and separate
 - develop responses to match player's attributes, e.g. playing style
 - word wrapping to improve output
 */
@@ -19,7 +18,7 @@ DEVELOPMENT IDEAS
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Glandor {
+public class Game1 {
 
   static int row = 0;
   static boolean quit = false;
@@ -44,17 +43,28 @@ public class Glandor {
 
     System.out.println(" ");
     System.out.println("Welcome wanderer. You've entered the quest to reach Glandor Castle. Type 'quit' or 'q' to end the game at any time.\n\nWhat do you call yourself?");
+
     String playerName = start.nextLine();
-    if (start.equals(quitA)){quit();return;}
-    if (start.equals(quitB)){quit();return;}
+
+    if (start.equals(quitA)){
+      quit();return;
+    }
+    if (start.equals(quitB)){
+      quit();return;
+    }
 
     System.out.println(" ");
     System.out.println("How old are you? Enter your age in numbers, e.g. 22.");
-    int playerAge = start.nextInt();
+
+
+    int playerAge = testAge();
+    if (playerAge == 0){
+      quit();return;
+    }
     if (playerAge < 18){
-      System.out.print("Sorry. You need to be 18 or over to play this game."); return;}
-      if (start.equals(quitA)){quit();return;}
-      if (start.equals(quitB)){quit();return;}
+      System.out.print("Sorry. You need to be 18 or over to play this game.");
+      return;
+    }
 
     Player wanderer = new Player(playerName, playerAge);
 
@@ -63,7 +73,6 @@ public class Glandor {
     Location bedroom = new Location("East", "bedroom", "a bed and chest");
     Location kitchen = new Location("West", "kitchen", "a fridge and oven");
 
-    //boolean denotes emptiness
     Furnature sofa = new Furnature(false, "sofa");
     Furnature table = new Furnature(false, "table");
     Furnature cabinet = new Furnature(false, "cabinet");
@@ -80,7 +89,7 @@ public class Glandor {
     bag = new ArrayList<String>();
 
     System.out.printf("%n***********%n");
-    System.out.printf("%nHi %s. %n%nYou are currently floating above a magical cottage. On your back is an empty bag which acts as your inventory.%nFind the clues to take you to your destiny. %n%n"
+    System.out.printf("%nHi %s. %n%nYou are currently floating above a mystical cottage. On your back is an empty bag which acts as your inventory.%nFind the clues to take you to your destiny. %n%n"
       + "Type 'help' (no quotation marks) at any time for assistance.%nType 'quit' or 'q' to end the game.%n%n", wanderer.getName());
     System.out.printf("***********%n");
 
@@ -149,7 +158,7 @@ public class Glandor {
             case "look part 2": System.out.println("Baby there ain't no part 2. Go do some workplace activities."); break;
             case "look": System.out.println("There are four rooms in this cottage. What would you like to see?"); break;
             case "secrets" : bag.add("key"); bag.add("gun"); bag.add("letter"); bag.add("mirror"); shootPad = true; partTwo = true;
-            case "part 2": case "part two": if (partTwo){System.out.println("The Silent Mage waits for you on the other side. You take a few steps into the passage and find you're suddenly frozen where you stand.\nYour breathing rate begins to rise. Anxiety threatens to rear its ugly head, until you realise you can still step backwards. \nWhen you do, a message fills your head, as if sent telepathically:\n \nDo not come now. Return to me with the blood moon.\n \nYou find yourself leaning on the wall once more. This is impossible, and yet so real.\nYou sense this mage somehow holds all the secrets of the castle. You want to meet her; you need to find out more.\nBut the next blood moon is a such long way away.  Surely instructions will come sooner. Surely!\n\nYou leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge;}
+            case "part 2": case "part two": if (partTwo){System.out.println("The Silent Mage waits for you on the other side. You take a few steps into the passage and find you're suddenly frozen where you stand.\nYour breathing rate begins to rise. Anxiety threatens to rear its ugly head, until you realise you can still step backwards. \nWhen you do, a message fills your head, as if sent telepathically:\n \nDo not come now. Return to me with the blood moon.\n \nYou find yourself leaning on the wall once more. This is impossible, and yet so real.\nYou sense this mage somehow holds all the secrets of the castle. You want to meet her; you need to find out more.\nBut the next blood moon is so far away.  Surely instructions will come sooner. Surely!\n\nYou leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge;}
               else {System.out.println("You aren't ready yet. You need to complete the game to reach Part 2.");}; break;
             default: System.out.println("You can't do that here."); break ;
         }//end of switch
@@ -158,13 +167,30 @@ public class Glandor {
   }//end of main function
 
 
+  public static int testAge(){
+    int i;
+    String tryAge;
+    int validAge = 0;
+
+    Scanner age = new Scanner(System.in);
+
+    for (i = 1; i > 0; i++){
+      System.out.println("Enter your age");
+      tryAge = age.nextLine();
+      try {validAge = Integer.parseInt(tryAge); return validAge;
+      } catch (NumberFormatException e){System.out.println("You need to enter a valid number. Press 0 to quit");
+      }
+    } return validAge;
+  }//end of test age method
+
+
 public static void quit(){
   System.out.println("Thank you for playing, good bye.");
 }//end of quit method
 
 
 public static void help(){
-  String direction = "to teleport to the north of the bulding (same applies for other directions)";
+  String direction = "to teleport to the north of the building (same applies for other directions)";
   String look = "to look at rooms, objects, etc. from a distance, e.g. look garage";
   String search = "to find clues, e.g. search car";
   String take = "to place item in your bag, e.g. take shoe";
@@ -186,13 +212,18 @@ public static void inventory() {
   }//end of inventory method
 
 
-public static void hint() {
-  String [][] gameHints = { {"1st hint ", "spelling is important."}, {"2nd hint ", "sometimes it helps to step back and take a look a things."}, {"3rd hint ", "stick to those commands at your disposal."}, {"4th hint ", "search through items when you feel the need."}, {"5th hint", "silly, you can't carry furnature in your bag."}, {"6th hint", "serious? you need another hint?"} };
-  for (int column=0; column < gameHints[row].length; column++){
-    System.out.println(gameHints[row][column]);
-  }
-    row++;
-}//end of hint method
+  public static void hint() {
+    try{
+      String [][] gameHints = { {"1st hint ", "spelling is important."}, {"2nd hint ", "start in the North, can't go wrong."}, {"3rd hint ", "sometimes it helps to step back and take a look a things."}, {"4th hint ", "stick to those commands at your disposal."}, {"5th hint ", "search through items when you feel the need."}, {"6th hint", "silly, you can't carry furnature in your bag."}, {"7th hint", "serious? You need another hint?"} };
+      for (int column=0; column < gameHints[row].length; column++){
+        System.out.println(gameHints[row][column]);
+      }
+      row++;
+    }
+    catch(Exception e){
+        System.out.println("You're out of hints.");
+    }
+  }//end of hint method
 
 
   //PLAYER
