@@ -4,6 +4,7 @@ Enjoy!
 
 DEVELOPMENT IDEAS
 
+- add the key doesn't open padlock
 - more interaction between player and words
 - more description about rooms when 'look'
 - include a couple hidden codes within the rooms
