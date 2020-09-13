@@ -1,21 +1,23 @@
-/**Lauritta Burrows 5th September 2020
-Text-based game written in Java.
-Enjoy!
-
-DEVELOPMENT IDEAS
-
-- document methods using conventions
-- convert hints into simple array
-- use polymorphism to create different player types and develp responses to match their attributes, e.g. stealth vs brute force
-- allow for login on website for player session, make login information private
-- tell a story, more interaction, different endings
-
-*/
+/**
+* Glandor, the text based game to be played withing 50 moves
+* Part 2 will arrive in 2021...Enjoy!
+*
+* @ author Lauritta Burrows
+* @ version 1.1
+* @ 5th September 2020
+*
+* DEVELOPMENT IDEAS
+* -have quit() return boolean true
+* -convert hints into simple array
+* -use polymorphism to create different player types and develp responses to match their attributes, e.g. stealth vs brute force
+* -tell a story, more interaction, different endings
+* -allow for login on website for player session, make login information private
+* */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game1 {
+public class Glandor {
 
   static int row = 0;
   static boolean quit = false;
@@ -173,7 +175,14 @@ public class Game1 {
   }//end of main function
 
 
+
   public static int testAge(){
+    /**
+    * Converts player entries for age into integers
+    * @param input age as a String variable
+    * @return validAge integer
+    * @exception NumberFormatException if player enters something other than an int
+    */
     int a;
     String tryAge;
     int validAge = 0;
@@ -191,11 +200,21 @@ public class Game1 {
 
 
 public static void quit(){
+  /**
+   * Allows player to quit at any time
+   * @param none
+   * @return none
+  */
   System.out.println("Thank you for playing, good bye.");
 }//end of quit method
 
 
 public static void help(){
+  /**
+   * Provides a list of commands for the player to use
+   * @param none
+   * @return none
+  */
   String direction = "to teleport to the north of the building (same applies for other directions)";
   String look = "to look at rooms, objects, etc. from a distance, e.g. look garage";
   String search = "to find clues, e.g. search car";
@@ -211,6 +230,11 @@ public static void help(){
 
 
 public static void inventory() {
+  /**
+   * Prints total number of elements along with a list current elements in the 'bag' arraylist
+   * @param none
+   * @return none
+  */
   System.out.printf("You have %d items in your bag: ", bag.size());
   for (String i: bag){
     System.out.print(i+" ");}
@@ -219,7 +243,13 @@ public static void inventory() {
 
 
   public static void hint() {
-      try{
+    /**
+     * Provides a limited number of hints for the player
+     * @param none
+     * @return none
+     * @exception element out of bounds after reaching the end of the array
+    */
+    try{
         String [][] gameHints = { {"1st hint ", "spelling is important."}, {"2nd hint ", "start in the North, can't go wrong."}, {"3rd hint ", "sometimes it helps to step back and take a look a things."}, {"4th hint ", "stick to those commands at your disposal."}, {"5th hint ", "search through items when you feel the need."}, {"6th hint", "silly, you can't carry furnature in your bag."}, {"7th hint", "serious? You need another hint?"} };
         for (int column=0; column < gameHints[row].length; column++){
           System.out.println(gameHints[row][column]);
@@ -230,6 +260,7 @@ public static void inventory() {
           System.out.println("You're out of hints.");
       }
     }//end of hint method
+
 
   //PLAYER
   public static class Player {
