@@ -7,8 +7,6 @@
 * @ 5th September 2020
 *
 * DEVELOPMENT IDEAS
-* -have quit() return boolean true
-* -convert hints into simple array
 * -use polymorphism to create different player types and develp responses to match their attributes, e.g. stealth vs brute force
 * -tell a story, more interaction, different endings
 * -allow for login on website for player session, make login information private
@@ -19,8 +17,7 @@ import java.util.Scanner;
 
 public class Glandor {
 
-  static int row = 0;
-  static boolean quit = false;
+  static int h = 0;
   static String directions = "You are now in the %s. You can see %s. %n";
   static String distanceView = "You're looking at the %s from a distance. ";
   static String nonSpecial = "There is nothing special to see here.\n";
@@ -96,8 +93,8 @@ public class Glandor {
     Scanner input = new Scanner(System.in);
     int attempts = 0;
 
-    bridge://label to be used in furture development of game
-    while (quit!=true || attempts<50){
+    bridge:
+    while (attempts<50){
         System.out.println("\nWhat would you like to do now?"+"\n");
         attempts++;
         String command = input.nextLine().toLowerCase().trim();
@@ -105,7 +102,7 @@ public class Glandor {
 
         switch(command){
 
-            case quitA: case quitB: quit(); quit=true; break;
+            case quitA: case quitB: quit(); break bridge;
             case "help": help(); break;
             case "hint": hint(); break;
             case "inv": inventory(); break;
@@ -169,7 +166,7 @@ public class Glandor {
 
         }//end of switch
         if (attempts==40){System.out.printf("%You're getting weary. You've 10 more tries to reach part 2 when you can rest.%n");}
-        if (attempts==50){System.out.printf("You've had too many attempts, %s. Better luck next time.%n", wanderer.getName()); quit(); quit=true;}
+      if (attempts==50){System.out.printf("You've had too many attempts, %s. Better luck next time.%n", wanderer.getName()); quit(); break bridge;}
     }//end of while loop
 
   }//end of main function
@@ -242,24 +239,22 @@ public static void inventory() {
   }//end of inventory method
 
 
-  public static void hint() {
+
+  public static int hint() {
     /**
      * Provides a limited number of hints for the player
      * @param none
-     * @return none
+     * @return an increment of integr h
      * @exception element out of bounds after reaching the end of the array
     */
     try{
-        String [][] gameHints = { {"1st hint ", "spelling is important."}, {"2nd hint ", "start in the North, can't go wrong."}, {"3rd hint ", "sometimes it helps to step back and take a look a things."}, {"4th hint ", "stick to those commands at your disposal."}, {"5th hint ", "search through items when you feel the need."}, {"6th hint", "silly, you can't carry furnature in your bag."}, {"7th hint", "serious? You need another hint?"} };
-        for (int column=0; column < gameHints[row].length; column++){
-          System.out.println(gameHints[row][column]);
-        }
-        row++;
-      }
-      catch(Exception e){
-          System.out.println("You're out of hints.");
-      }
-    }//end of hint method
+        String [] gameHints = { "1st hint---> spelling is important.", "2nd hint---> start in the North, can't go wrong.", "3rd hint---> step back and take a look a things now and then.", "4th hint---> stick to those commands at your disposal.", "5th hint---> search through items when you feel the need.", "6th hint---> silly, you can't carry furnature in your bag.", "7th hint--->   serious? You need another hint?", "8th hint--->   sometimes, you just don't need a key" };
+        System.out.println(gameHints[h]);
+    }
+    catch(Exception e){
+       System.out.println("You're out of hints.");
+    } return h++;
+  }//end of hint method
 
 
   //PLAYER
