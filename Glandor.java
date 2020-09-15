@@ -7,15 +7,22 @@
 * @ 5th September 2020
 *
 * DEVELOPMENT IDEAS
-* -use polymorphism to create different player types and develp responses to match their attributes, e.g. stealth vs brute force
+* -consistent spacing between lines, e.g. after running inventory method and at end of game
+* - seperate colour for descriptive writings
+* - add iages using symbols at the start and at part 2
+* -restrict more than 1 of the same item in bag
+*- you're out of hints warning, in ANSI yellow 33
 * -tell a story, more interaction, different endings
-* -allow for login on website for player session, make login information private
+* -use inheritance to create different player types and method overiding to develop responses to match their attributes, stealth vs brute force
+* -allow for login sessions website for player session, make login information private, e.g. private player attributes
+* -truncate age using explicit casting, e.g. double a = age input, int b = (int)a for acct details
+* -consider abstraction and interfaces for final design
 * */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Glandor {
+public class Game1 {
 
   static int h = 0;
   static String directions = "You are now in the %s. You can see %s. %n";
@@ -33,6 +40,10 @@ public class Glandor {
   static ArrayList<String> bag;
   static final String quitA = "quit";
   static final String quitB = "q";
+  static String cantRED = "\u001B[31m";
+  static String hintGREEN = "\u001B[32m";
+  static String bagBLUE = "\u001B[34m";
+  static String resetCOLOUR ="\u001B[0m";
 
   public static void main(String[] args) {
 
@@ -151,18 +162,18 @@ public class Glandor {
             case "search oven": case "open oven": System.out.println(nonSpecial); break;
             case "look fridge": System.out.printf(distanceView, fridge.getType() + " (it's padlocked)"); break;
             case "unlock padlock": case "open lock": if (partTwo != true){System.out.println(noKey);} else {continue;}; break;
-            case "shoot padlock": case "shoot lock": shootPad = true; System.out.println("The padlock falls away and the fridge opens.\n"); break;
+            case "shoot padlock": case "shoot lock": shootPad = true; System.out.println("The padlock falls away and the fridge opens."); break;
             case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.println("You notice a secret passage leading down into the earth. You lean against the wall of the passage way entrance. It's coolness has a calming effect, as distant sounds hum and vibrate through the surface. You can see a soft glow in the distance inviting you in.\n"
               + "Treasures await but there's no need to rush. Take a rest and check your inventory. "); inventory();
                 if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). Head back, collect more clues, and then search here again. %n", (Clue.countObjects - bag.size()));}
-                else {System.out.println("You have all the clues you need to enter Glandor Castle. Instructions will follow in Part 2 of this game.");}; break;}
-              else {System.out.println("You can't open the fridge to search it.");}; break;
+                else {System.out.println("\n\nYou have all the clues you need to enter Glandor Castle. Instructions will follow in Part 2 of this game.");}; break;}
+              else {System.out.printf("%s %s", cantRED+"You can't open the fridge to search it.", resetCOLOUR);}; break;
             case "look part 2": System.out.println("Baby there ain't no part 2. Go do some workplace activities."); break;
             case "look": System.out.println("There are four rooms in this cottage. What would you like to see?"); break;
             case "secrets" : bag.add("key"); bag.add("gun"); bag.add("letter"); bag.add("mirror"); shootPad = true; partTwo = true;
             case "part 2": case "part two": if (partTwo){System.out.printf("%s, the Silent Mage waits for you on the other side. You take a few steps into the passage and find you're suddenly frozen where you stand.%nYour breathing rate begins to rise. Anxiety threatens to rear its ugly head, until you realise you can still step backwards. %nWhen you do, a message fills your head, as if sent telepathically:%n%nDo not come now. Return to me with the blood moon.%n%nYou find yourself leaning on the wall once more. This is impossible, and yet so real.%nYou sense this mage somehow holds all the secrets of the castle. You want to meet her; you need to find out more.%nBut the next blood moon is so far away.  Surely instructions will come sooner. Surely!%n%nYou leave the cottage, determined to find a way to meet the mage and enter Glandor Castle...", wanderer.getName()); break bridge;}
               else {System.out.println("You aren't ready yet. You need to complete the game to reach Part 2.");}; break;
-            default: System.out.println("You can't do that here."); break ;
+            default: System.out.printf("%s %s", cantRED+"You can't do that here.", resetCOLOUR); break ;
 
         }//end of switch
         if (attempts==40){System.out.printf("%You're getting weary. You've 10 more tries to reach part 2 when you can rest.%n");}
@@ -232,10 +243,10 @@ public static void inventory() {
    * @param none
    * @return none
   */
-  System.out.printf("You have %d items in your bag: ", bag.size());
+  System.out.printf("%s %d %s", bagBLUE+"You have", bag.size(), "items in your bag: ");
   for (String i: bag){
-    System.out.print(i+" ");}
-    System.out.println("\n");
+    System.out.printf(i+" ");}
+  System.out.printf("%s", resetCOLOUR);
   }//end of inventory method
 
 
@@ -249,7 +260,7 @@ public static void inventory() {
     */
     try{
         String [] gameHints = { "1st hint---> spelling is important.", "2nd hint---> start in the North, can't go wrong.", "3rd hint---> step back and take a look a things now and then.", "4th hint---> stick to those commands at your disposal.", "5th hint---> search through items when you feel the need.", "6th hint---> silly, you can't carry furnature in your bag.", "7th hint--->   serious? You need another hint?", "8th hint--->   sometimes, you just don't need a key" };
-        System.out.println(gameHints[h]);
+        System.out.printf("%s %s", hintGREEN+gameHints[h], resetCOLOUR);
     }
     catch(Exception e){
        System.out.println("You're out of hints.");
