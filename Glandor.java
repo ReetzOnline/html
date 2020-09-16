@@ -28,7 +28,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game1 {
+public class Glandor {
 
   static int h = 0;
   static String directions = "You're now in the %s. You can see %s.";
