@@ -7,16 +7,7 @@
 * @ 5th September 2020
 *
 * DEVELOPMENT IDEAS
-* -check layout for 10 more attempts to go and to many
-* -printf() has max numebr of stamenets?
-* -find the passageway only once
-* -change view of fridge after when shootPad is true
-* -when enter nothing, blank line warning
-* -change commands for printf formatting
-* -remove whitespace around player's names
-* -allow q or quit when entering age
 * -restrict more than 1 of the same item in bag
-* -seperate colour for descriptive writings
 * -add images using symbols at the start and at part 2
 * -tell a story, more interaction, different endings
 * -use inheritance to create different player types and method overiding to develop responses to match their attributes, stealth vs brute force
@@ -28,7 +19,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Glandor {
+public class Game1 {
 
   static int h = 0;
   static String directions = "You're now in the %s. You can see %s.";
@@ -46,6 +37,7 @@ public class Glandor {
   static ArrayList<String> bag;
   static final String quitA = "quit";
   static final String quitB = "q";
+  //30 - 37 coloured text, 40 - 47 coloured background, 90 - 97 bright coloured text
   static String cantRED = "\u001B[31m";
   static String hintGREEN = "\u001B[32m";
   static String warnYELLOW = "\u001B[93m";
@@ -53,8 +45,13 @@ public class Glandor {
   static String talkPURPLE = "\u001B[95m";
   static String resetCOLOUR ="\u001B[0m";
   static String BOLD = "\u001B[1m";
-
+  static String talkBLINK = "\u001B[5m";
+  static String backWHITE = "\u001B[47m";
   static boolean discovered = false;
+  static String haveIT = "You already have that in your bag.";
+  //static boolean inBag;
+  //static String dontHave = "You don't have that in your bag.";
+  //static boolean outBag;
 
   public static void main(String[] args) {
 
@@ -62,7 +59,7 @@ public class Glandor {
 
     System.out.printf("%n%nWelcome wanderer. You've entered the quest to reach Glandor Castle. %n%n%s%s %n%n%s %n", warnYELLOW+"Type 'quit' or 'q' to end the game at any time.", resetCOLOUR, "What do you call yourself?");
 
-    String playerName = start.nextLine();
+    String playerName = start.nextLine().trim();
 
     if (playerName.equals(quitA)){
       quit();return;
@@ -113,7 +110,7 @@ public class Glandor {
     int attempts = 0;
 
     bridge:
-    while (attempts<50){
+    while (attempts<10){
         System.out.printf("%n%nWhat would you like to do now?%n%n");
         attempts++;
         String command = input.nextLine().toLowerCase().trim();
@@ -121,6 +118,7 @@ public class Glandor {
 
         switch(command){
 
+            case "": System.out.printf("%s %s", warnYELLOW+"You need to enter a command.", resetCOLOUR); break;
             case quitA: case quitB: quit(); break bridge;
             case "help": help(); break;
             case "hint": hint(); break;
@@ -170,21 +168,24 @@ public class Glandor {
               if (oven.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
             case "search oven": case "open oven": System.out.printf(nonSpecial); break;
             case "look fridge": System.out.printf(distanceView, fridge.getType() + " (it's padlocked)"); break;
-            case "unlock padlock": case "open padlock": case "unlock lock": case "open lock": if (partTwo != true){System.out.printf(noKey);} else {continue;}; break;
-            case "shoot padlock": case "shoot lock": shootPad = true; System.out.printf("The padlock falls away and the fridge opens."); break;
-            case "search fridge": case "open fridge": partTwo = true; if(shootPad){System.out.printf("You notice a secret passage leading down into the earth. %nYou lean against the wall of the passageway entrance. %nIts coolness oagainst your arm has a calming effect, and distant sounds hum and vibrate through the surface. %nYou can see a soft glow in the distance inviting you in. %n%nTreasures await, but there's no need to rush. %nTake a rest and check your inventory. %n%n"); inventory();
-                if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). %nHead back, collect more clues, and then search here again.", (Clue.countObjects - bag.size()));}
-                else {System.out.printf("%nYou now have all the clues you need to enter Glandor Castle. %nType 'part 2' to keep going.");}; break;}
+            case "shoot padlock": case "shoot lock": shootPad=true; System.out.printf("The padlock falls away and the fridge opens."); break;
+            case "unlock padlock": case "open padlock": case "unlock lock": case "open lock": if (shootPad != true){System.out.printf("%s Find another way to open this.", noKey);} else {System.out.printf("It's already open.");}; break;
+            case "search fridge": case "open fridge":
+              if (shootPad) {
+                  if(!partTwo){System.out.printf("%s %n%s %n%s %n%s %n%s %n%s%s %n", talkPURPLE+"You notice a secret passage leading down into the earth.", "You lean against the wall of the passageway entrance.", "Its coolness against your arm has a calming effect, and distant sounds hum and vibrate through the surface.", "You can see a soft glow in the distance inviting you in.", "Treasures await, but there's no need to rush.", "Take a rest and check your inventory. ", resetCOLOUR); inventory(); partTwo=true;}
+                  if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). %nHead back, collect more clues, and then search here again.", (Clue.countObjects - bag.size()));}
+                  else {System.out.printf("%nYou now have all the clues you need to enter Glandor Castle. %nType 'part 2' to keep going.");}
+              }
               else {System.out.printf("%s %s", cantRED+"You can't open the fridge to search it.", resetCOLOUR);}; break;
             case "look part 2": System.out.printf("Baby there ain't no part 2. %nGo do some workplace activities."); break;
             case "secrets" : bag.add("key"); bag.add("gun"); bag.add("letter"); bag.add("mirror"); shootPad = true; partTwo = true;
-            case "part 2": case "part two": if (partTwo){System.out.printf("%s, %s %n%s %n%s %n%s %n%s %n%n%s %n%n%s%s %n%s %n%s %n%s %n%n%s", wanderer.getName(), "the Silent Mage waits for you on the other side.", "You take a few steps into the passage and find you're suddenly frozen where you stand.", "You're breathing more quickly.", "Anxiety threatens to rear its ugly head, until you realise you can step backwards.", "When you do, a message fills your head, as if sent telepathically:", BOLD+talkPURPLE+"Do not come now. Return to me with the blood moon.", resetCOLOUR, "You find yourself leaning on the wall once more.", "This is impossible, yet so real.", "You want to meet her; you need to find out more.", "But the next blood moon is so far away.", "You leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge;}
+            case "part 2": case "part two": if (partTwo){System.out.printf("%s, %s %n%s %n%s %n%s %n%s %n%n%s%s %n%n%s %n%s %n%s %n%s%s %n%n%s", talkPURPLE+wanderer.getName(), "the Silent Mage waits for you on the other side.", "You take a few steps into the passage and find you're suddenly frozen where you stand.", "You're breathing more quickly.", "Anxiety threatens to rear its ugly head, until you realise you can step backwards.", "When you do, a message fills your head, as if sent telepathically:", BOLD+talkPURPLE+backWHITE+"...Do not come now. Return to me with the blood moon...", resetCOLOUR, talkPURPLE+"You find yourself leaning on the wall once more.", "This is impossible, yet so real.", "You want to meet her; you need to find out more.", "But the next blood moon is so far away.", resetCOLOUR,"You leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge;}
               else {System.out.printf("You aren't ready yet. You need to complete the game to reach Part 2.");}; break;
             default: System.out.printf("%s %s", cantRED+"You can't do that here.", resetCOLOUR); break ;
 
         }//end of switch
-        if (attempts==40){System.out.printf("You're getting weary. You've 10 more tries to reach part 2 when you can rest.");}
-      if (attempts==50){System.out.printf("You've had too many attempts, %s. Better luck next time", wanderer.getName()); quit(); break bridge;}
+        if (attempts==5){System.out.printf("%n%n%s %n%s%s", warnYELLOW+"You're getting weary.", "You've 10 more tries to reach part 2, when you can rest.", resetCOLOUR);}
+      if (attempts==10){System.out.printf("%n%n%s, %s. %n%s%s %n", warnYELLOW+"You've had too many attempts", wanderer.getName(), "Better luck next time.", resetCOLOUR); quit(); break bridge;}
     }//end of while loop
 
   }//end of main function
@@ -206,8 +207,16 @@ public class Glandor {
 
     for (a = 1; a > 0; a++){
       tryAge = age.nextLine();
-      try {validAge = Integer.parseInt(tryAge); return validAge;
-      } catch (NumberFormatException e){System.out.printf("You need to enter a valid number for your age. Or press 0 to quit the game.%n");
+
+      try {
+        if (tryAge.equals(quitA)){
+          return validAge; }
+        if (tryAge.equals(quitB)){
+          return validAge; }
+        else {
+          validAge = Integer.parseInt(tryAge); return validAge; }
+      }
+      catch (NumberFormatException e){System.out.printf("You need to enter a valid number for your age.%n");
       }
     } return validAge;
   }//end of test age method
@@ -219,7 +228,7 @@ public static void quit(){
    * @param none
    * @return none
   */
-  System.out.printf("%nThank you for playing, good bye.");
+  System.out.printf("%nThank you for playing...good bye.");
 }//end of quit method
 
 
@@ -229,15 +238,15 @@ public static void help(){
    * @param none
    * @return none
   */
-  String direction = "to teleport to the north of the building (same applies for other directions)";
-  String look = "to look at rooms, objects, etc. from a distance, e.g. look garage";
-  String search = "to find clues, e.g. search car";
-  String take = "to place item in your bag, e.g. take shoe";
-  String drop = "to remove item from your bag, e.g. drop shoe";
-  String inv = "to see what's in your inventory";
-  String hint = "to get an assist, if you're stuck, but only if you really need it";
-  String part2 = "to find out what happens next";
-  String quit = "to end the game";
+  String direction = "- to teleport to the north of the building (same applies for other directions)";
+  String look = "- to look at rooms, objects, etc. from a distance, e.g. look garage";
+  String search = "- to find clues, e.g. search car";
+  String take = "- to place item in your bag, e.g. take shoe";
+  String drop = "- to remove item from your bag, e.g. drop shoe";
+  String inv = "- to see what's in your inventory";
+  String hint = "- to get an assist, if you're stuck, but only if you really need it";
+  String part2 = "- to find out what happens next";
+  String quit = "- to end the game";
 
   System.out.printf("Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
     }//end of help method
@@ -249,7 +258,7 @@ public static void inventory() {
    * @param none
    * @return none
   */
-  System.out.printf("%s %d %s", bagBLUE+"You have", bag.size(), "items in your bag: ");
+  System.out.printf("%n%s %d %s", bagBLUE+"You have", bag.size(), "items in your bag: ");
   for (String i: bag){
     System.out.printf(i+" ");}
   System.out.printf("%s%n", resetCOLOUR);
@@ -356,6 +365,7 @@ public static void inventory() {
       String item;
       boolean magical;
       String hidingSpot;
+      //boolean inBag;
       static int countObjects = 0;
 
       Clue(boolean magical, String item, String hidingSpot) {
