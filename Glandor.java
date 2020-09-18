@@ -7,19 +7,16 @@
 * @ 5th September 2020
 *
 * DEVELOPMENT IDEAS
-* -restrict more than 1 of the same item in bag
-* -add images using symbols at the start and at part 2
 * -tell a story, more interaction, different endings
-* -use inheritance to create different player types and method overiding to develop responses to match their attributes, stealth vs brute force
-* -allow for login sessions website for player session, make login information private, e.g. private player attributes
-* -truncate age using explicit casting, e.g. double a = age input, int b = (int)a for acct details
+* -use inheritance to create different player types and method overiding to develop responses to match attributes, e.g. stealth vs brute force
+* -allow for login sessions, make login information private, e.g. private player attributes
 * -consider abstraction and interfaces for final design
 * */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game1 {
+public class Glandor {
 
   static int h = 0;
   static String directions = "You're now in the %s. You can see %s.";
@@ -29,8 +26,9 @@ public class Game1 {
   static String findings = "You find a %s in the %s.";
   static String sense = "You sense something about this clue.";
   static String noMagic = "This clue doesn't appear to have any magical qualities.";
+  static String inBag = "You already have that in your bag.";
   static String toBag = "You added the %s to your bag.";
-  static String fromBag = "You no longer have the %s in your bag.";
+  static String fromBag = "You don't have the %s in your bag.";
   static String noKey = "Your key is useless here.";
   static boolean shootPad = false;
   static boolean partTwo = false;
@@ -49,9 +47,6 @@ public class Game1 {
   static String backWHITE = "\u001B[47m";
   static boolean discovered = false;
   static String haveIT = "You already have that in your bag.";
-  //static boolean inBag;
-  //static String dontHave = "You don't have that in your bag.";
-  //static boolean outBag;
 
   public static void main(String[] args) {
 
@@ -102,16 +97,32 @@ public class Game1 {
 
     bag = new ArrayList<String>();
 
-    System.out.printf("%n**************%n");
+
     System.out.printf("%nHi %s. %n%nYou're currently floating above a mystical cottage. %nOn your back is an empty bag which acts as your inventory. %nFind the clues to take you to your destiny. %n%n%s %s %n",  wanderer.getName(), warnYELLOW+"Type 'help' (no quotation marks) at any time for assistance.", resetCOLOUR);
-    System.out.printf("%n**************");
+    System.out.printf("%n%n");
+
+    System.out.println("                  ^");
+    System.out.println("               ^^^^^^");
+    System.out.println("           ^^^^^^^^^^^^^^^");
+    System.out.println("       ^^^^^^^^^^^^^^^^^^^^^^^");
+    System.out.println("  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    System.out.println("    &                           &");
+    System.out.println("    &                           &");
+    System.out.println("    &         &&&&&&&&&         &");
+    System.out.println("    &         &       &         &");
+    System.out.println("    &         &       &         &");
+    System.out.println("    &         &       &         &");
+    System.out.println("    &         &       &         &");
+    System.out.println("    &&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+    System.out.printf("%n%n");
 
     Scanner input = new Scanner(System.in);
     int attempts = 0;
 
     bridge:
-    while (attempts<10){
-        System.out.printf("%n%nWhat would you like to do now?%n%n");
+    while (true){
+        System.out.printf(BOLD+"%n%n\033[3mWhat would you like to do now?\033[0m%n%n");
         attempts++;
         String command = input.nextLine().toLowerCase().trim();
 
@@ -128,64 +139,77 @@ public class Game1 {
             case "north": case "lounge": System.out.printf(directions, lounge.getRoom(), lounge.getFurnishings()); break;
             case "look lounge": System.out.printf(lounge.getDirection() + " - " + directions, lounge.getRoom(), lounge.getFurnishings()); break;
             case "look sofa": System.out.printf(distanceView, sofa.getType());
-              if (sofa.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (sofa.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest); }; break;
             case "search sofa": System.out.printf(findings, key.getItem(), key.getHidingSpot());
-              if (key.getMagical()){System.out.printf(sense);} else {System.out.printf(noMagic);}; break;
-            case "take key": bag.add("key"); System.out.printf(toBag, key.getItem()); inventory(); break;
+              if (key.getMagical()){ System.out.printf(sense);} else { System.out.printf(noMagic); }; break;
+            case "take key":
+              if(!bag.contains("key")){
+                bag.add("key"); System.out.printf(toBag, key.getItem()); inventory();}
+              else { System.out.printf("%s %s", warnYELLOW+inBag, resetCOLOUR); }; break;
             case "drop key": bag.remove("key"); System.out.printf(fromBag, key.getItem()); inventory(); break;
             case "look table": System.out.printf(distanceView, table.getType());
-              if (table.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (table.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest); }; break;
             case "search table": System.out.printf(findings, gun.getItem(), gun.getHidingSpot());
-              if (gun.getMagical()){System.out.printf(sense);} else {System.out.printf(noMagic);}; break;
-            case "take gun": bag.add("gun"); System.out.printf(toBag, gun.getItem()); inventory(); break;
+              if (gun.getMagical()){ System.out.printf(sense); } else { System.out.printf(noMagic); }; break;
+            case "take gun":
+              if(!bag.contains("gun")){
+                bag.add("gun"); System.out.printf(toBag, gun.getItem()); inventory(); }
+              else { System.out.printf("%s %s", warnYELLOW+inBag, resetCOLOUR); }; break;
             case "drop gun": bag.remove("gun"); System.out.printf(fromBag, gun.getItem()); inventory(); break;
             //bathroom
             case "south": case "bathroom": System.out.printf(directions, bathroom.getRoom(), bathroom.getFurnishings()); break;
             case "look bathroom": System.out.printf(bathroom.getDirection() + " - " + directions, bathroom.getRoom(), bathroom.getFurnishings()); break;
             case "look cabinet": System.out.printf(distanceView, cabinet.getType());
-              if (cabinet.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (cabinet.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest); }; break;
             case "search cabinet": case "open cabinet": System.out.printf(findings, letter.getItem(), letter.getHidingSpot());
-              if (letter.getMagical()){System.out.printf(sense);} else {System.out.printf(noMagic);}; break;
-            case "take letter": bag.add("letter"); System.out.printf(toBag, letter.getItem()); inventory(); break;
+              if (letter.getMagical()){ System.out.printf(sense); } else { System.out.printf(noMagic); }; break;
+            case "take letter":
+              if(!bag.contains("letter")){
+                bag.add("letter"); System.out.printf(toBag, letter.getItem()); inventory(); }
+              else { System.out.printf("%s %s", warnYELLOW+inBag, resetCOLOUR); }; break;
             case "drop letter": bag.remove("letter"); System.out.printf(fromBag, letter.getItem()); inventory(); break;
             //bedroom
             case "east": case "bedroom": System.out.printf(directions, bedroom.getRoom(), bedroom.getFurnishings()); break;
             case "look bedroom": System.out.printf(bedroom.getDirection() + " - " + directions, bedroom.getRoom(), bedroom.getFurnishings()); break;
             case "look bed": System.out.printf(distanceView, bed.getType());
-              if (bed.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (bed.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest); }; break;
             case "search bed": System.out.printf(nonSpecial); break;
             case "unlock chest": System.out.printf(noKey); break;
             case "look chest": case "open chest": System.out.printf(distanceView, chest.getType());
-              if (chest.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (chest.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest);            }; break;
             case "search chest": System.out.printf(findings, mirror.getItem(), mirror.getHidingSpot());
-              if (mirror.getMagical()){System.out.printf(sense);} else {System.out.printf(noMagic);}; break;
-            case "take mirror": bag.add("mirror"); System.out.printf(toBag, mirror.getItem()); inventory(); break;
+              if (mirror.getMagical()){ System.out.printf(sense); } else { System.out.printf(noMagic); }; break;
+            case "take mirror":
+              if(!bag.contains("mirror")){
+                bag.add("mirror"); System.out.printf(toBag, mirror.getItem()); inventory(); }
+              else { System.out.printf("%s %s", warnYELLOW+inBag, resetCOLOUR); }; break;
             case "drop mirror": bag.remove("mirror"); System.out.printf(fromBag, mirror.getItem()); inventory(); break;
             //Kitchen
             case "west": case "kitchen": System.out.printf(directions, kitchen.getRoom(), kitchen.getFurnishings()); break;
             case "look kitchen": System.out.printf(kitchen.getDirection() + " - " + directions, kitchen.getRoom(), kitchen.getFurnishings()); break;
             case "look oven": System.out.printf(distanceView, oven.getType());
-              if (oven.getEmptiness()){System.out.printf(nonSpecial);} else {System.out.printf(ofInterest);}; break;
+              if (oven.getEmptiness()){ System.out.printf(nonSpecial); } else { System.out.printf(ofInterest); }; break;
             case "search oven": case "open oven": System.out.printf(nonSpecial); break;
             case "look fridge": System.out.printf(distanceView, fridge.getType() + " (it's padlocked)"); break;
             case "shoot padlock": case "shoot lock": shootPad=true; System.out.printf("The padlock falls away and the fridge opens."); break;
             case "unlock padlock": case "open padlock": case "unlock lock": case "open lock": if (shootPad != true){System.out.printf("%s Find another way to open this.", noKey);} else {System.out.printf("It's already open.");}; break;
             case "search fridge": case "open fridge":
               if (shootPad) {
-                  if(!partTwo){System.out.printf("%s %n%s %n%s %n%s %n%s %n%s%s %n", talkPURPLE+"You notice a secret passage leading down into the earth.", "You lean against the wall of the passageway entrance.", "Its coolness against your arm has a calming effect, and distant sounds hum and vibrate through the surface.", "You can see a soft glow in the distance inviting you in.", "Treasures await, but there's no need to rush.", "Take a rest and check your inventory. ", resetCOLOUR); inventory(); partTwo=true;}
-                  if (Clue.countObjects > bag.size()) {System.out.printf("You're missing %d clue(s). %nHead back, collect more clues, and then search here again.", (Clue.countObjects - bag.size()));}
-                  else {System.out.printf("%nYou now have all the clues you need to enter Glandor Castle. %nType 'part 2' to keep going.");}
+                  if(!partTwo){ System.out.printf("%s %n%s %n%s %n%s %n%s %n%s%s %n", talkPURPLE+"You notice a secret passage leading down into the earth.", "You lean against the wall of the passageway entrance.", "Its coolness against your arm has a calming effect, and distant sounds hum and vibrate through the surface.", "You can see a soft glow in the distance inviting you in.", "Treasures await, but there's no need to rush.", "Take a rest and check your inventory. ", resetCOLOUR); inventory(); partTwo=true; }
+                  if (Clue.countObjects > bag.size()) { System.out.printf("You're missing %d clue(s). %nHead back, collect more clues, and then search here again.", (Clue.countObjects - bag.size())); }
+                  else { System.out.printf("%nYou now have all the clues you need to enter Glandor Castle. %nType 'part 2' to keep going."); }
               }
-              else {System.out.printf("%s %s", cantRED+"You can't open the fridge to search it.", resetCOLOUR);}; break;
+              else { System.out.printf("%s %s", cantRED+"You can't open the fridge to search it.", resetCOLOUR); }; break;
             case "look part 2": System.out.printf("Baby there ain't no part 2. %nGo do some workplace activities."); break;
             case "secrets" : bag.add("key"); bag.add("gun"); bag.add("letter"); bag.add("mirror"); shootPad = true; partTwo = true;
-            case "part 2": case "part two": if (partTwo){System.out.printf("%s, %s %n%s %n%s %n%s %n%s %n%n%s%s %n%n%s %n%s %n%s %n%s%s %n%n%s", talkPURPLE+wanderer.getName(), "the Silent Mage waits for you on the other side.", "You take a few steps into the passage and find you're suddenly frozen where you stand.", "You're breathing more quickly.", "Anxiety threatens to rear its ugly head, until you realise you can step backwards.", "When you do, a message fills your head, as if sent telepathically:", BOLD+talkPURPLE+backWHITE+"...Do not come now. Return to me with the blood moon...", resetCOLOUR, talkPURPLE+"You find yourself leaning on the wall once more.", "This is impossible, yet so real.", "You want to meet her; you need to find out more.", "But the next blood moon is so far away.", resetCOLOUR,"You leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge;}
-              else {System.out.printf("You aren't ready yet. You need to complete the game to reach Part 2.");}; break;
+            case "part 2": case "part two":
+              if (partTwo){ System.out.printf("%s, %s %n%s %n%s %n%s %n%s %n%n%s%s %n%n%s %n%s %n%s %n%s%s %n%n%s", talkPURPLE+wanderer.getName(), "the Silent Mage waits for you on the other side.", "You take a few steps into the passage and find you're suddenly frozen where you stand.", "You're breathing more quickly.", "Anxiety threatens to rear its ugly head, until you realise you can step backwards.", "When you do, a message fills your head, as if sent telepathically:", BOLD+talkPURPLE+backWHITE+"...Do not come now. Return to me with the blood moon...", resetCOLOUR, talkPURPLE+"You find yourself leaning on the wall once more.", "This is impossible, yet so real.", "You want to meet her; you need to find out more.", "But the next blood moon is so far away.", resetCOLOUR,"You leave the cottage, determined to find a way to meet the mage and enter Glandor Castle..."); break bridge; }
+              else  {System.out.printf("You aren't ready yet. You need to complete the game to reach Part 2."); }; break;
             default: System.out.printf("%s %s", cantRED+"You can't do that here.", resetCOLOUR); break ;
 
         }//end of switch
-        if (attempts==5){System.out.printf("%n%n%s %n%s%s", warnYELLOW+"You're getting weary.", "You've 10 more tries to reach part 2, when you can rest.", resetCOLOUR);}
-      if (attempts==10){System.out.printf("%n%n%s, %s. %n%s%s %n", warnYELLOW+"You've had too many attempts", wanderer.getName(), "Better luck next time.", resetCOLOUR); quit(); break bridge;}
+        if (attempts==40){ System.out.printf("%n%n%s %n%s%s", warnYELLOW+"You're getting weary.", "You've 10 more tries to reach part 2, when you can rest.", resetCOLOUR); }
+      if (attempts==50){ System.out.printf("%n%n%s, %s. %n%s%s %n", warnYELLOW+"You've had too many attempts", wanderer.getName(), "Better luck next time.", resetCOLOUR); quit(); break bridge; }
     }//end of while loop
 
   }//end of main function
@@ -222,57 +246,57 @@ public class Game1 {
   }//end of test age method
 
 
-public static void quit(){
+  public static void quit(){
   /**
    * Allows player to quit at any time
    * @param none
    * @return none
   */
-  System.out.printf("%nThank you for playing...good bye.");
-}//end of quit method
+    System.out.printf("%nThank you for playing...Good bye.");
+  }//end of quit method
 
 
-public static void help(){
+  public static void help(){
   /**
    * Provides a list of commands for the player to use
    * @param none
    * @return none
   */
-  String direction = "- to teleport to the north of the building (same applies for other directions)";
-  String look = "- to look at rooms, objects, etc. from a distance, e.g. look garage";
-  String search = "- to find clues, e.g. search car";
-  String take = "- to place item in your bag, e.g. take shoe";
-  String drop = "- to remove item from your bag, e.g. drop shoe";
-  String inv = "- to see what's in your inventory";
-  String hint = "- to get an assist, if you're stuck, but only if you really need it";
-  String part2 = "- to find out what happens next";
-  String quit = "- to end the game";
+    String direction = "- to teleport to the north of the building (same applies for other directions)";
+    String look = "- to look at rooms, objects, etc. from a distance, e.g. look garage";
+    String search = "- to find clues, e.g. search car";
+    String take = "- to place item in your bag, e.g. take shoe";
+    String drop = "- to remove item from your bag, e.g. drop shoe";
+    String inv = "- to see what's in your inventory";
+    String hint = "- to get an assist, if you're stuck, but only if you really need it";
+    String part2 = "- to find out what happens next";
+    String quit = "- to end the game";
 
-  System.out.printf("Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
-    }//end of help method
+    System.out.printf("Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
+  }//end of help method
 
 
-public static void inventory() {
+  public static void inventory() {
   /**
    * Prints total number of elements along with a list current elements in the 'bag' arraylist
    * @param none
    * @return none
   */
-  System.out.printf("%n%s %d %s", bagBLUE+"You have", bag.size(), "items in your bag: ");
-  for (String i: bag){
-    System.out.printf(i+" ");}
-  System.out.printf("%s%n", resetCOLOUR);
+    System.out.printf("%n%s %d %s", bagBLUE+"You have", bag.size(), "items in your bag: ");
+    for (String i: bag){
+      System.out.printf(i+" ");}
+      System.out.printf("%s%n", resetCOLOUR);
   }//end of inventory method
 
 
 
   public static int hint() {
-    /**
-     * Provides a limited number of hints for the player
-     * @param none
-     * @return an increment of integr h
-     * @exception element out of bounds after reaching the end of the array
-    */
+  /**
+   * Provides a limited number of hints for the player
+   * @param none
+   * @return an increment of integr h
+   * @exception element out of bounds after reaching the end of the array
+  */
     try{
         String [] gameHints = { "1st hint---> spelling is important.", "2nd hint---> start in the North, can't go wrong.", "3rd hint---> step back and take a look a things now and then.", "4th hint---> stick to those commands at your disposal.", "5th hint---> search through items when you feel the need.", "6th hint---> silly, you can't carry furnature in your bag.", "7th hint--->   serious? You need another hint?", "8th hint--->   sometimes, you just don't need a key" };
         System.out.printf("%s %s", hintGREEN+gameHints[h], resetCOLOUR);
@@ -365,7 +389,7 @@ public static void inventory() {
       String item;
       boolean magical;
       String hidingSpot;
-      //boolean inBag;
+
       static int countObjects = 0;
 
       Clue(boolean magical, String item, String hidingSpot) {
