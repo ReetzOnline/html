@@ -16,14 +16,14 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Glandor {
+public class Game1 {
 
   static int h = 0;
   static String directions = "You're now in the %s. You can see %s.";
   static String distanceView = "You're looking at the %s from a distance. ";
   static String nonSpecial = "There is nothing special to see here.";
   static String ofInterest = "Hmmmm, there is more to see here.";
-  static String findings = "You find a %s in the %s.";
+  static String findings = "You find a %s in the %s. ";
   static String sense = "You sense something about this clue.";
   static String noMagic = "This clue doesn't appear to have any magical qualities.";
   static String inBag = "You already have that in your bag.";
@@ -78,7 +78,7 @@ public class Glandor {
     Player wanderer = new Player(playerName, playerAge);
 
     Location lounge = new Location("North", "lounge", "a sofa and table");
-    Location bathroom = new Location("South", "bathroom", "a cabinet unit");
+    Location bathroom = new Location("South", "bathroom", "a cabinet");
     Location bedroom = new Location("East", "bedroom", "a bed and chest");
     Location kitchen = new Location("West", "kitchen", "a fridge and oven");
 
@@ -272,7 +272,7 @@ public class Glandor {
     String part2 = "- to find out what happens next";
     String quit = "- to end the game";
 
-    System.out.printf("Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
+    System.out.printf("Use any of the following commands to help you on your journey:%n%nnorth\t%s %nlook\t%s %nsearch\t%s %ntake\t%s %ndrop\t%s %ninv\t\t%s %nhint\t%s %npart 2\t%s %nquit\t%s %n%n", direction, look, search, take, drop, inv, hint, part2, quit);
   }//end of help method
 
 
@@ -298,7 +298,7 @@ public class Glandor {
    * @exception element out of bounds after reaching the end of the array
   */
     try{
-        String [] gameHints = { "1st hint---> spelling is important.", "2nd hint---> start in the North, can't go wrong.", "3rd hint---> step back and take a look a things now and then.", "4th hint---> stick to those commands at your disposal.", "5th hint---> search through items when you feel the need.", "6th hint---> silly, you can't carry furnature in your bag.", "7th hint--->   serious? You need another hint?", "8th hint--->   sometimes, you just don't need a key" };
+        String [] gameHints = { "1st hint---> spelling is important.", "2nd hint---> start in the North, can't go wrong.", "3rd hint---> step back and take a look at things now and then.", "4th hint---> stick to those commands at your disposal.", "5th hint---> search through items when you feel the need.", "6th hint---> silly, you can't carry furnature in your bag.", "7th hint--->   sometimes, you just don't need a key", "8th hint--->   serious? You need another hint?" };
         System.out.printf("%s %s", hintGREEN+gameHints[h], resetCOLOUR);
     }
     catch(Exception e){
