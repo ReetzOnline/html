@@ -1,0 +1,110 @@
+/*variables to me used in a number of places*/
+$gold: #ffcc00;
+$drkgreen: #004c00;
+$turquoise: #00cccc;
+$teal: #004c4c;
+$ltyellow: #ffffcc;
+$green: #009900;
+
+body {
+  background-color: $ltyellow;
+  text-align: center;
+  color: $teal;
+  margin: 10px;
+  /*background-color: $ltyellow;*/
+  font-family: arial,sans-serif;
+  font-size: 1.5em;}
+
+
+h1 {
+  color: $turquoise;  }
+
+h2 {
+  color: $teal; }
+
+h4 {
+  color: $drkgreen; }
+
+.download {
+    color: $green;  }
+
+#me {
+  color: $gold;  }
+
+
+  /*element selector*/
+nav {
+  padding-bottom: 20px;
+  text-align: center; }
+
+/*child selector & example of nesting*/
+  .row > div {
+  padding: 10px;
+  background-color: $ltyellow;  }
+
+
+#homepad > div {
+  padding: 5px;
+}
+
+
+#portfoliopad > div {
+  border: 20px solid $turquoise;  }
+
+
+#cv {
+  background-image: url("software_tree.jpg");
+  .tdend {
+    padding-bottom: 20px;  }
+  #courses tr {
+    line-height: 30px;  }
+  .row > div {
+    padding: 30px;
+    padding-left: 60px;  }
+  .row > .col-12 {
+    padding-top: 60px;  }
+  .row > #cvDown {
+    padding-bottom: 60px;  }
+}
+
+
+#cv > .container {
+  padding: 10px;  }
+
+
+.lefted {
+  text-align: left; }
+
+
+/*Descendent and multiple selectors
+ul li, td {
+  font-size: 14px; }
+  */
+
+
+ul {
+  padding-left: 13px;
+  li {
+    padding-bottom: 10px;  }
+}
+
+
+button {
+  background-color: $green;
+  font-weight: bold;
+  font-size: 14px; }
+
+
+/*pseudoclass selector*/
+button:hover {
+  background-color:  $gold;}
+
+
+@media (max width: 380px) {
+  .optional {
+    display: none; } }
+
+/*# sourceMappingURL=styles.css.map */
+
+
+/* from home page <img src="software_tree.jpg" width=75%> */
