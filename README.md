@@ -8,3 +8,6 @@ https://webmail.reetzonline.com
 
 New LAMP based email server now included, using Roundcube, Postfix and Dovecot. 
 
+https://Glandor.reetzonline.repl.run
+
+Click the link to play the text based game, Glandor, written in java.
