@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,10 +8,10 @@
   </head>
    <header>
     <nav>
-      <a class="btn btn-info" href="scripts/home.html" role="button">home</a>
+      <a class="btn btn-info" href="scripts/scripts/home.html" role="button">home</a>
       <a class="btn btn-primary" href="index.nginx-debian.html" role="button">portfolio</a>
-      <a class="btn btn-warning" href="scripts/cv.html" role="button">cv</a>
-      <a class="btn btn-success" href="scripts/contact.html" role="button">contact</a>
+      <a class="btn btn-warning" href="cv.html" role="button">cv</a>
+      <a class="btn btn-success" href="contact.html" role="button">contact</a>
     </nav>
   </header>
   <body>
